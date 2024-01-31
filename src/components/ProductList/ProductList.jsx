@@ -30,21 +30,21 @@ const ProductList = () => {
             totalPrice: getTotalPrice(addedItems),
             queryId,
         }
-        fetch('http://91.236.199.19:8000/web-data', {
+        fetch('http://192.168.0.254:8000/web-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         })
-    }, [addedItems])
+    }, [addedItems, queryId])
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
         return () => {
             tg.offEvent('mainButtonClicked', onSendData)
         }
-    }, [onSendData])
+    }, [onSendData, tg])
 
     const onAdd = (product) => {
         const alreadyAdded = addedItems.find(item => item.id === product.id);
