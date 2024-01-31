@@ -3,7 +3,7 @@ import s from './Button.module.css'
 const Button = (props) => {
 
     return (
-        <button {...props} className={s.button} />
+        <button {...props} className={`${s.button} ${props.className}`} />
     )
 }
 
