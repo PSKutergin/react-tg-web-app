@@ -30,7 +30,10 @@ const ProductList = () => {
             totalPrice: getTotalPrice(addedItems),
             queryId,
         }
-        fetch('http://91.236.199.19:8000/web-data', {
+
+        console.log(data);
+
+        fetch('https://491f-5-3-106-147.ngrok-free.app/web-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,16 +72,22 @@ const ProductList = () => {
     }
 
     return (
-        <div className={s.list}>
-            {products.map(item => (
-                <ProductItem
-                    key={item.id}
-                    product={item}
-                    onAdd={onAdd}
-                    className={s.item}
-                />
-            ))}
-        </div>
+        <>
+            <div className={s.list}>
+                {products.map(item => (
+                    <ProductItem
+                        key={item.id}
+                        product={item}
+                        onAdd={onAdd}
+                        className={s.item}
+                    />
+                ))}
+            </div>
+            <button className={s.button} onClick={onSendData}>ButtonSend</button>
+        </>
+
+
+
     )
 }
 
