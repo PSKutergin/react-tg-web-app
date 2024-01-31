@@ -1,18 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import s from './ProductList.module.css'
 import ProductItem from '../ProductItem/ProductItem';
 import { useTelegram } from '../../hooks/useTelegram';
-
-const products = [
-    { id: '1', title: 'Джинсы', price: 5000, description: 'Синего цвета, прямые' },
-    { id: '2', title: 'Куртка', price: 12000, description: 'Зеленого цвета, теплая' },
-    { id: '3', title: 'Джинсы 2', price: 5000, description: 'Синего цвета, прямые' },
-    { id: '4', title: 'Куртка 8', price: 122, description: 'Зеленого цвета, теплая' },
-    { id: '5', title: 'Джинсы 3', price: 5000, description: 'Синего цвета, прямые' },
-    { id: '6', title: 'Куртка 7', price: 600, description: 'Зеленого цвета, теплая' },
-    { id: '7', title: 'Джинсы 4', price: 5500, description: 'Синего цвета, прямые' },
-    { id: '8', title: 'Куртка 5', price: 12000, description: 'Зеленого цвета, теплая' },
-]
+import { API_URL } from '../../const';
+import { fetchProducts } from '../../store/products/products.slice';
 
 const getTotalPrice = (items = []) => {
     return items.reduce((acc, item) => {
@@ -21,6 +13,18 @@ const getTotalPrice = (items = []) => {
 }
 
 const ProductList = () => {
+    const dispatch = useDispatch();
+    const { data, loading, error } = useSelector((state) => state.goods);
+
+    console.log(data);
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div>Произошла ошибка: {error}</div>;
+
     const [addedItems, setAddedItems] = useState([]);
     const { tg, queryId } = useTelegram();
 
@@ -31,9 +35,7 @@ const ProductList = () => {
             queryId,
         }
 
-        console.log(data);
-
-        fetch('https://491f-5-3-106-147.ngrok-free.app/web-data', {
+        fetch(`${API_URL}/web-data`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,9 +87,6 @@ const ProductList = () => {
             </div>
             <button className={s.button} onClick={onSendData}>ButtonSend</button>
         </>
-
-
-
     )
 }
 
